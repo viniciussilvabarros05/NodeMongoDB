@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>LINKS</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Links</h1>
+        <a href="/add">Adicionar link</a>
+        <% for (let i=0;i<doc.length;i++){%> <!--recebendo doc de allLinks-->
+            <div class="card p-3 mb-3" id='<%= doc[i]._id %>'>
+                <div class="d-flex  align-items-center justify-content-between">
+                    <div class="d-flex flex-column">
+                        <h2>
+                            <%=doc[i].title %>
+                        </h2>
+                        <div>
+                            <%=doc[i].description %>
+                        </div>
+                        <div class="text-muted">
+                           <a target="_blank" href="<%=doc[i].url%>"><%=doc[i].url%></a>
+                        </div>
+                        <div class="text-info"> <i class="material-icons"> bar_chart</i>Clicks: <%=doc[i].click%></div>
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <a  class="btn btn-info mb-1" href="/edit/<%=doc[i]._id%>">Edit</a>
+                        <button class="btn btn-danger" onclick="deleteLink('<%=doc[i]._id%>')">delete</button> 
+                    </div>
+                </div>
+            </div>
+            <%} %>
+    </div>
+    <script>
+
+        function deleteLink(id) {
+            fetch("/" + id, { method: 'DELETE' }).then(res => {
+
+                if (res.status == 200) {
+
+                    res.text().then(linkId => { //capturando o texto com res.text() e retorna uma promise
+                        console.log(linkId)
+                        document.getElementById(linkId).remove()
+
+                    })
+                } else {
+                    res.json().then(err => {
+                        alert(err.message)
+                    })
+                }
+
+            })
+        }
+    </script>
+
+</body>
+
+</html>
